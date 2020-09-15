@@ -1,0 +1,7 @@
+# Python temporary files
+__pycache__/
+*.py[co]
+.ipynb_checkpoints/
+.DS_Store
+
+Functions/defaults.py
