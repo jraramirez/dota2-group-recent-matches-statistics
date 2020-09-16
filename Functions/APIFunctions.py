@@ -9,3 +9,9 @@ def getMatchData(matchId):
     uri = "https://api.opendota.com/api/matches/" + str(matchId)
     r = requests.get(uri)
     return r.json()
+
+def parseMatch(matchId):
+    uri = "https://api.opendota.com/api/request/" + str(matchId)
+    r = requests.get(uri)
+    return r.json()
+    

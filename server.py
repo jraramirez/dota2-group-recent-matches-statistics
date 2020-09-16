@@ -18,7 +18,19 @@ def chatWinRate():
 def chatmeteorHammerStats():
     recentMatches = df.getRecentMatches()
     meteorHammerStats = stats.calculateMeteorHammerPurchases(recentMatches)
+    # print(meteorHammerStats)
     wf.chatmeteorHammerStats(meteorHammerStats)
+    return {}
+
+@app.route('/parse-recent-matches', methods=['GET'])
+def parseRecentMatches():
+    recentMatches = df.getRecentMatches()
+    df.parseRecentMatches(recentMatches)
+    return {}
+    
+@app.route('/chat-g', methods=['GET'])
+def chatG():
+    wf.chatG()
     return {}
     
 
