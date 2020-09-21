@@ -6,25 +6,42 @@ import defaults
 import APIFunctions as af
 
 
-def getRecentMatches():
+def matchIsParsed(match):
+    if not match["version"] == None:
+        return True
+    return False
+
+
+def getRecentMatches(parsedOnly):
     allRecentMatches = []
     matchIds = []
     for accountId in defaults.ACCOUNT_IDS:
         playerRecentMatches = af.getPlayerRecentMatches(accountId)
         for recentMatch in playerRecentMatches:
-            # if not recentMatch["match_id"] in matchIds and recentMatch["party_size"] > 3:
-            if not recentMatch["match_id"] in matchIds and recentMatch["version"]:
+            # if not recentMatch["match_id"] in matchIds and recentMatch["party_size"] > 3 and matchIsParsed(recentMatch) :
+            if not recentMatch["match_id"] in matchIds and recentMatch["party_size"] > 3 and matchIsParsed(recentMatch):
                 allRecentMatches.append(recentMatch)
                 matchIds.append(recentMatch["match_id"])
-    # print(len(matchIds))
-    # for match in allRecentMatches:
-    #     print(match["match_id"])
+            if not recentMatch["match_id"] in matchIds and recentMatch["party_size"] > 3 and not parsedOnly and not matchIsParsed(recentMatch):
+                allRecentMatches.append(recentMatch)
+                matchIds.append(recentMatch["match_id"])
     return allRecentMatches
 
 
 def parseRecentMatches(recentMatches):
+    matchesStatus = []
     for match in recentMatches:
-        af.parseMatch(match["match_id"])
+        if matchIsParsed(match):
+            matchesStatus.append(True)
+        else:
+            matchesStatus.append(False)
+    for match in recentMatches:
+        if not matchesStatus[recentMatches.index(match)]:
+            af.parseMatch(match["match_id"])
+            if matchIsParsed(match):
+                matchesStatus[recentMatches.index(match)] = True
+            print(str(match["match_id"]) + " - " +  str(matchesStatus[recentMatches.index(match)]))
+    print("\nNumber of unparsed: ", matchesStatus.count(False))
     return True
 
 

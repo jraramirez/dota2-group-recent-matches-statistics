@@ -9,14 +9,14 @@ app = Flask(__name__)
 
 @app.route('/chat-win-rate', methods=['GET'])
 def chatWinRate():
-    recentMatches = df.getRecentMatches()
+    recentMatches = df.getRecentMatches(parsedOnly=False)
     winRate = stats.calculateMatchesWinRate(recentMatches)
     wf.chatWinRate(winRate)
     return {}
     
 @app.route('/chat-meme-hammer-stats', methods=['GET'])
 def chatmeteorHammerStats():
-    recentMatches = df.getRecentMatches()
+    recentMatches = df.getRecentMatches(parsedOnly=True)
     meteorHammerStats = stats.calculateMeteorHammerPurchases(recentMatches)
     # print(meteorHammerStats)
     wf.chatmeteorHammerStats(meteorHammerStats)
@@ -24,7 +24,7 @@ def chatmeteorHammerStats():
 
 @app.route('/parse-recent-matches', methods=['GET'])
 def parseRecentMatches():
-    recentMatches = df.getRecentMatches()
+    recentMatches = df.getRecentMatches(parsedOnly=False)
     df.parseRecentMatches(recentMatches)
     return {}
     
