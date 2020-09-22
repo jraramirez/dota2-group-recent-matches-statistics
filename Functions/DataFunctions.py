@@ -53,9 +53,10 @@ def matchWon(match):
 
 
 def matchHasMeteorHammer(matchData):
-    players = matchData["players"]
-    for player in players:
-        if player["account_id"] in defaults.ACCOUNT_IDS and (player["purchase"] and "meteor_hammer" in player["purchase"]):
-        # if player["account_id"] in defaults.ACCOUNT_IDS and "meteor_hammer" in player["purchase"]:
-            return True
+    if "players" in matchData:
+        players = matchData["players"]
+        for player in players:
+            if player["account_id"] in defaults.ACCOUNT_IDS and (player["purchase"] and "meteor_hammer" in player["purchase"]):
+            # if player["account_id"] in defaults.ACCOUNT_IDS and "meteor_hammer" in player["purchase"]:
+                return True
     return False

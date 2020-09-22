@@ -29,12 +29,15 @@ def calculateMeteorHammerPurchases(matches):
     numberOfWins = 0
     numberOfMeteorHammerMatches = 0
     numberOfNoMeteorHammerMatches = 0
+    numberOfMatchesPerMeteorHammerCount = [0] * 6
+    numberOfWinsPerMeteorHammerCount = [0] * 6
     for player in meteorHammerPlayerPurchases:
         player["meteor_hammer_total_purchases"] = 0
         player["number_of_matches"] = 0
     for match in matches:
         matchData = af.getMatchData(match["match_id"])
         matchWon = df.matchWon(match)
+        matchMeteorHammerCount = 0
         if matchWon:
             numberOfWins += 1
         if df.matchHasMeteorHammer(matchData):
@@ -46,7 +49,8 @@ def calculateMeteorHammerPurchases(matches):
             players = matchData["players"]
             for player in players:
                 if player["account_id"] in defaults.ACCOUNT_IDS and "meteor_hammer" in player["purchase"]:
-                    meteorHammerTotalPurchases = meteorHammerTotalPurchases + player["purchase"]["meteor_hammer"]
+                    matchMeteorHammerCount += 1
+                    meteorHammerTotalPurchases += player["purchase"]["meteor_hammer"]
                     meteorHammerPlayerPurchases[defaults.ACCOUNT_IDS.index(player["account_id"])]["meteor_hammer_total_purchases"] += 1
         else:
             numberOfNoMeteorHammerMatches += 1
@@ -54,7 +58,19 @@ def calculateMeteorHammerPurchases(matches):
                 noMeteorHammerWinCount += 1
             else:
                 noMeteorHammerLossCount += 1
+        numberOfMatchesPerMeteorHammerCount[matchMeteorHammerCount] += 1
+        if matchWon:
+            numberOfWinsPerMeteorHammerCount[matchMeteorHammerCount] += 1
 
+    meteorHammerCountWinRates = []
+    count = 0
+    for w, m in zip(numberOfWinsPerMeteorHammerCount, numberOfMatchesPerMeteorHammerCount):
+        meteorHammerCountWinRates.append({
+            "count": count,
+            "win_rate": "{:.2f}".format(w/m*100) if not m == 0 else "No matches"
+            })
+        count += 1
+    
     memeHammerStats = {
         "number_of_matches": len(matches),
         "meteor_hammer_win_rate": meteorHammerWinCount/numberOfMeteorHammerMatches*100,
@@ -62,6 +78,7 @@ def calculateMeteorHammerPurchases(matches):
         "meteor_hammer_loss_rate": meteorHammerLossCount/numberOfMeteorHammerMatches*100,
         "no_meteor_hammer_loss_rate": noMeteorHammerLossCount/numberOfNoMeteorHammerMatches*100,
         "meteor_hammer_total_purchases" : meteorHammerTotalPurchases,
-        "meteor_hammer_purchases_per_player": meteorHammerPlayerPurchases
+        "meteor_hammer_purchases_per_player": meteorHammerPlayerPurchases,
+        "meteor_hammer_count_win_rates": meteorHammerCountWinRates
     }
     return memeHammerStats

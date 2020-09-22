@@ -15,11 +15,11 @@ def chatWinRate():
     return {}
     
 @app.route('/chat-meme-hammer-stats', methods=['GET'])
-def chatmeteorHammerStats():
+def chatMeteorHammerStats():
     recentMatches = df.getRecentMatches(parsedOnly=True)
     meteorHammerStats = stats.calculateMeteorHammerPurchases(recentMatches)
     # print(meteorHammerStats)
-    wf.chatmeteorHammerStats(meteorHammerStats)
+    wf.chatMeteorHammerStats(meteorHammerStats)
     return {}
 
 @app.route('/parse-recent-matches', methods=['GET'])
