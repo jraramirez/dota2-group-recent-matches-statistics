@@ -17,7 +17,7 @@ def chatWinRate(winRate):
 def chatMeteorHammerStats(meteorHammerStats):
     uri = "https://discordapp.com/api/webhooks/" + defaults.DISCORD_WEBHOOK_ID + "/" + defaults.DISCORD_WEBHOOK_TOKEN
     content = \
-        "\n**Meme Hammer Statistics (Recent Games)**" + \
+        "\n**Meme Hammer Statistics (Recent Matches)**" + \
         "\n**Number of matches:** " + str(meteorHammerStats["number_of_matches"]) + \
         "\n**Total meme hammers purchased:** " + str(meteorHammerStats["meteor_hammer_total_purchases"]) + \
         "\n**Chance of winning if team purchased at least one meme hammer:** " + "{:.2f}".format(meteorHammerStats["meteor_hammer_win_rate"]) + "%" + \
@@ -33,6 +33,13 @@ def chatMeteorHammerStats(meteorHammerStats):
     for player in meteorHammerStats["meteor_hammer_purchases_per_player"]:
         content = content + "<@!"+ player["discord_user_id"] +"> - " + str(player["meteor_hammer_total_purchases"]) + "\n"
 
+    data = {"content": content}
+    requests.post(uri, data)
+
+
+def chatWinRateAgainst(winRateAgainstStats):
+    uri = "https://discordapp.com/api/webhooks/" + defaults.DISCORD_WEBHOOK_ID + "/" + defaults.DISCORD_WEBHOOK_TOKEN
+    content = "g?"
     data = {"content": content}
     requests.post(uri, data)
 

@@ -82,3 +82,14 @@ def calculateMeteorHammerPurchases(matches):
         "meteor_hammer_count_win_rates": meteorHammerCountWinRates
     }
     return memeHammerStats
+
+
+def calculateWinRateAgainst(recentMatches):
+    winRateAgainstStats = {}
+    for match in recentMatches:
+        side = df.getTeamSide(match)
+        won = df.matchWon(match)
+        matchData = af.getMatchData(match["match_id"])
+        enemyHeroes = df.getEnemyHeroes(matchData, side)
+        print(enemyHeroes)
+    return winRateAgainstStats

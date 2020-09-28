@@ -18,8 +18,14 @@ def chatWinRate():
 def chatMeteorHammerStats():
     recentMatches = df.getRecentMatches(parsedOnly=True)
     meteorHammerStats = stats.calculateMeteorHammerPurchases(recentMatches)
-    # print(meteorHammerStats)
     wf.chatMeteorHammerStats(meteorHammerStats)
+    return {}
+
+@app.route('/chat-win-rate-against', methods=['GET'])
+def chatWinRateAgainst():
+    recentMatches = df.getRecentMatches(parsedOnly=True)
+    winRateAgainstStats = stats.calculateWinRateAgainst(recentMatches)
+    wf.chatWinRateAgainst(winRateAgainstStats)
     return {}
 
 @app.route('/parse-recent-matches', methods=['GET'])

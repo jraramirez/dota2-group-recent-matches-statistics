@@ -18,6 +18,8 @@ def getRecentMatches(parsedOnly):
     for accountId in defaults.ACCOUNT_IDS:
         playerRecentMatches = af.getPlayerRecentMatches(accountId)
         for recentMatch in playerRecentMatches:
+            if not recentMatch["party_size"]:
+                continue
             # if not recentMatch["match_id"] in matchIds and recentMatch["party_size"] > 3 and matchIsParsed(recentMatch) :
             if not recentMatch["match_id"] in matchIds and recentMatch["party_size"] > 3 and matchIsParsed(recentMatch):
                 allRecentMatches.append(recentMatch)
@@ -60,3 +62,21 @@ def matchHasMeteorHammer(matchData):
             # if player["account_id"] in defaults.ACCOUNT_IDS and "meteor_hammer" in player["purchase"]:
                 return True
     return False
+
+
+def getTeamSide(match):
+    return "RADIANT" if match["player_slot"] < 128 else "DIRE"
+
+
+def getEnemyHeroes(matchData, side):
+    enemyHeroes = []
+    if "players" in matchData:
+        players = matchData["players"]
+        for player in players:
+            if side == "DIRE":
+                if player["player_slot"] < 128:
+                    enemyHeroes.append(player["hero_id"])
+            else:
+                if player["player_slot"] >= 128:
+                    enemyHeroes.append(player["hero_id"])
+    return enemyHeroes
