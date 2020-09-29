@@ -85,6 +85,40 @@ def calculateMeteorHammerPurchases(matches):
     return memeHammerStats
 
 
+def calculateHeroWinRates(recentMatches):
+    heroWinRates = []
+    heroesJSON = {}
+    with open(defaults.DATA_DIR + "heroes.json") as json_file:
+        heroesJSON = json.load(json_file)
+    maxId = max([int(id) for id in heroesJSON.keys()])
+    heroesGameCount = [0] * (maxId + 1)
+    heroesWinCount = [0] * (maxId + 1)
+    for match in recentMatches:
+        side = df.getTeamSide(match)
+        won = df.matchWon(match)
+        matchData = af.getMatchData(match["match_id"])
+        matchHeroes = df.getMatchHeroes(matchData, side)
+        for matchHero in matchHeroes:
+            heroesGameCount[matchHero] += 1
+            if won:
+                heroesWinCount[matchHero] += 1
+    for i, gameCount in zip(range(len(heroesGameCount)), heroesGameCount):
+        if gameCount > 4:
+            winRate = heroesWinCount[i]/gameCount*100
+            heroWinRates.append({
+                "id": i,
+                "hero_name": heroesJSON[str(i)]["localized_name"],
+                "number_of_matches": gameCount,
+                "win_rate": winRate
+            })
+    heroWinRates = sorted(heroWinRates, key = lambda i: i['win_rate'], reverse=True)
+    heroWinRatesTop10 = heroWinRates[:10]
+    heroWinRates = {
+        "hero_win_rate_top_10" : heroWinRatesTop10
+    }
+    return heroWinRates
+
+
 def calculateWinRateAgainst(recentMatches):
     winRateAgainstStats = []
     heroesJSON = {}

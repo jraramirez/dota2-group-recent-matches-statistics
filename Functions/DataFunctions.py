@@ -80,3 +80,17 @@ def getMatchEnemyHeroes(matchData, side):
                 if player["player_slot"] >= 128:
                     enemyHeroes.append(player["hero_id"])
     return enemyHeroes
+
+
+def getMatchHeroes(matchData, side):
+    heroes = []
+    if "players" in matchData:
+        players = matchData["players"]
+        for player in players:
+            if side == "DIRE":
+                if player["player_slot"] >= 128:
+                    heroes.append(player["hero_id"])
+            else:
+                if player["player_slot"] < 128:
+                    heroes.append(player["hero_id"])
+    return heroes

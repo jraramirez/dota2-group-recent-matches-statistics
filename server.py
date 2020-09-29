@@ -28,6 +28,13 @@ def chatWinRateAgainst():
     wf.chatWinRateAgainst(winRateAgainstStats)
     return {}
 
+@app.route('/chat-hero-win-rates', methods=['GET'])
+def chatHeroWinRates():
+    recentMatches = df.getRecentMatches(parsedOnly=True)
+    heroWinRates = stats.calculateHeroWinRates(recentMatches)
+    wf.chatHeroWinRates(heroWinRates)
+    return {}
+
 @app.route('/parse-recent-matches', methods=['GET'])
 def parseRecentMatches():
     recentMatches = df.getRecentMatches(parsedOnly=False)

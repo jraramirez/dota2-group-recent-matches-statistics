@@ -53,6 +53,18 @@ def chatWinRateAgainst(winRateAgainstStats):
     requests.post(uri, data)
 
 
+def chatHeroWinRates(heroWinRates):
+    uri = "https://discordapp.com/api/webhooks/" + defaults.DISCORD_WEBHOOK_ID + "/" + defaults.DISCORD_WEBHOOK_TOKEN
+    content = \
+        "\n**Team Heroes Statistics (Recent Matches)**" + \
+        "\n**Team's top 10 successful heroes:**\n"
+    for hero in heroWinRates["hero_win_rate_top_10"]:
+        content = content + hero["hero_name"] + " - " + "{:.1f}".format(hero["win_rate"]) + "% (" + str(hero["number_of_matches"]) + " games)\n"
+
+    data = {"content": content}
+    requests.post(uri, data)
+
+
 def chatG():
     uri = "https://discordapp.com/api/webhooks/" + defaults.DISCORD_WEBHOOK_ID + "/" + defaults.DISCORD_WEBHOOK_TOKEN
     content = "g?"
