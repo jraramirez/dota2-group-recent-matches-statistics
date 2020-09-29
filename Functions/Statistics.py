@@ -104,7 +104,7 @@ def calculateWinRateAgainst(recentMatches):
             if won:
                 enemyHeroesWinCount[matchEnemyHero] += 1
     for i, gameCount in zip(range(len(enemyHeroesGameCount)), enemyHeroesGameCount):
-        if not gameCount == 0:
+        if gameCount > 4:
             winRate = enemyHeroesWinCount[i]/gameCount*100
             winRateAgainstStats.append({
                 "id": i,
@@ -112,6 +112,12 @@ def calculateWinRateAgainst(recentMatches):
                 "number_of_matches": gameCount,
                 "win_rate_against": winRate
             })
-    winRateAgainstStats = sorted(winRateAgainstStats, key = lambda i: i['number_of_matches']) 
-    print(winRateAgainstStats)
+    winRateAgainstStats = sorted(winRateAgainstStats, key = lambda i: i['number_of_matches'], reverse=True)
+    winRateAgainstStatsTop5 = sorted(winRateAgainstStats, key = lambda i: i['win_rate_against'], reverse=True)[:5]
+    winRateAgainstStatsBottom5 = sorted(winRateAgainstStats, key = lambda i: i['win_rate_against'])[:5]
+    winRateAgainstStats = {
+        "win_rate_against_top_5" : winRateAgainstStatsTop5,
+        "win_rate_against_bottom_5" : winRateAgainstStatsBottom5,
+
+    }
     return winRateAgainstStats

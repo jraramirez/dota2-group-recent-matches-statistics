@@ -8,7 +8,7 @@ import defaults
 
 def chatWinRate(winRate):
     uri = "https://discordapp.com/api/webhooks/" + defaults.DISCORD_WEBHOOK_ID + "/" + defaults.DISCORD_WEBHOOK_TOKEN
-    content = "\nTeam's win rate (recent matches): " + "{:.2f}".format(winRate["win_rate"]) + "%"
+    content = "\nTeam's win rate (recent matches): " + "{:.1f}".format(winRate["win_rate"]) + "%"
     print("Number of matches: " + str(winRate["number_of_matches"]))
     data = {"content": content}
     requests.post(uri, data)
@@ -20,8 +20,8 @@ def chatMeteorHammerStats(meteorHammerStats):
         "\n**Meme Hammer Statistics (Recent Matches)**" + \
         "\n**Number of matches:** " + str(meteorHammerStats["number_of_matches"]) + \
         "\n**Total meme hammers purchased:** " + str(meteorHammerStats["meteor_hammer_total_purchases"]) + \
-        "\n**Chance of winning if team purchased at least one meme hammer:** " + "{:.2f}".format(meteorHammerStats["meteor_hammer_win_rate"]) + "%" + \
-        "\n**Chance of winning if team did not purchase at least one meme hammer:** " + "{:.2f}".format(meteorHammerStats["no_meteor_hammer_win_rate"]) + "%" + \
+        "\n**Chance of winning if team purchased at least one meme hammer:** " + "{:.1f}".format(meteorHammerStats["meteor_hammer_win_rate"]) + "%" + \
+        "\n**Chance of winning if team did not purchase at least one meme hammer:** " + "{:.1f}".format(meteorHammerStats["no_meteor_hammer_win_rate"]) + "%" + \
         "\n**Win rate of team's number of meteor hammer purchases in a match:**\n"
     for meteorHammerCountWinRate in meteorHammerStats["meteor_hammer_count_win_rates"]:
         if meteorHammerCountWinRate["win_rate"] == "No matches":
@@ -39,7 +39,16 @@ def chatMeteorHammerStats(meteorHammerStats):
 
 def chatWinRateAgainst(winRateAgainstStats):
     uri = "https://discordapp.com/api/webhooks/" + defaults.DISCORD_WEBHOOK_ID + "/" + defaults.DISCORD_WEBHOOK_TOKEN
-    content = "g?"
+    content = \
+        "\n**Enemy Heroes Statistics (Recent Matches)**" + \
+        "\n**Top 5 enemy heroes wherein the team has low win rates:**\n"
+    for enemyHero in winRateAgainstStats["win_rate_against_bottom_5"]:
+        content = content + enemyHero["hero_name"] + " - " + "{:.1f}".format(enemyHero["win_rate_against"]) + "% (" + str(enemyHero["number_of_matches"]) + " games)\n"
+
+    content = content + "\n**Top 5 enemy heroes wherein the team has high win rates:**\n"
+    for enemyHero in winRateAgainstStats["win_rate_against_top_5"]:
+        content = content + enemyHero["hero_name"] + " - " + "{:.1f}".format(enemyHero["win_rate_against"]) + "% (" + str(enemyHero["number_of_matches"]) + " games)\n"
+
     data = {"content": content}
     requests.post(uri, data)
 
