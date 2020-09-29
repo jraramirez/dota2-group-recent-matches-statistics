@@ -25,7 +25,7 @@ def chatMeteorHammerStats():
 def chatWinRateAgainst():
     recentMatches = df.getRecentMatches(parsedOnly=True)
     winRateAgainstStats = stats.calculateWinRateAgainst(recentMatches)
-    wf.chatWinRateAgainst(winRateAgainstStats)
+    # wf.chatWinRateAgainst(winRateAgainstStats)
     return {}
 
 @app.route('/parse-recent-matches', methods=['GET'])

@@ -68,7 +68,7 @@ def getTeamSide(match):
     return "RADIANT" if match["player_slot"] < 128 else "DIRE"
 
 
-def getEnemyHeroes(matchData, side):
+def getMatchEnemyHeroes(matchData, side):
     enemyHeroes = []
     if "players" in matchData:
         players = matchData["players"]

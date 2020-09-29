@@ -1,4 +1,5 @@
 import sys
+import json
 
 sys.path.append("Functions")
 sys.path.append("../Functions")
@@ -85,11 +86,32 @@ def calculateMeteorHammerPurchases(matches):
 
 
 def calculateWinRateAgainst(recentMatches):
-    winRateAgainstStats = {}
+    winRateAgainstStats = []
+    heroesJSON = {}
+    with open(defaults.DATA_DIR + "heroes.json") as json_file:
+        heroesJSON = json.load(json_file)
+    maxId = max([int(id) for id in heroesJSON.keys()])
+    enemyHeroesGameCount = [0] * (maxId + 1)
+    enemyHeroesWinCount = [0] * (maxId + 1)
     for match in recentMatches:
         side = df.getTeamSide(match)
         won = df.matchWon(match)
+        # print(match["match_id"])
         matchData = af.getMatchData(match["match_id"])
-        enemyHeroes = df.getEnemyHeroes(matchData, side)
-        print(enemyHeroes)
+        matchEnemyHeroes = df.getMatchEnemyHeroes(matchData, side)
+        for matchEnemyHero in matchEnemyHeroes:
+            enemyHeroesGameCount[matchEnemyHero] += 1
+            if won:
+                enemyHeroesWinCount[matchEnemyHero] += 1
+    for i, gameCount in zip(range(len(enemyHeroesGameCount)), enemyHeroesGameCount):
+        if not gameCount == 0:
+            winRate = enemyHeroesWinCount[i]/gameCount*100
+            winRateAgainstStats.append({
+                "id": i,
+                "hero_name": heroesJSON[str(i)]["localized_name"],
+                "number_of_matches": gameCount,
+                "win_rate_against": winRate
+            })
+    winRateAgainstStats = sorted(winRateAgainstStats, key = lambda i: i['number_of_matches']) 
+    print(winRateAgainstStats)
     return winRateAgainstStats

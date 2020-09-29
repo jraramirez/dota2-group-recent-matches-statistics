@@ -7,4 +7,6 @@ for match in recentMatches:
     print(match["match_id"], match["version"])
 print(len(recentMatches))
 
-df.parseRecentMatches(recentMatches)
+# df.parseRecentMatches(recentMatches)
+
+stats.calculateWinRateAgainst(recentMatches)
