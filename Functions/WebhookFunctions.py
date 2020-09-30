@@ -61,6 +61,11 @@ def chatHeroWinRates(heroWinRates):
     for hero in heroWinRates["hero_win_rate_top_10"]:
         content = content + hero["hero_name"] + " - " + "{:.1f}".format(hero["win_rate"]) + "% (" + str(hero["number_of_matches"]) + " games)\n"
 
+    content = content + \
+        "\n**Team's top 10 unsuccessful heroes:**\n"
+    for hero in heroWinRates["hero_win_rate_bottom_10"]:
+        content = content + hero["hero_name"] + " - " + "{:.1f}".format(hero["win_rate"]) + "% (" + str(hero["number_of_matches"]) + " games)\n"
+
     data = {"content": content}
     requests.post(uri, data)
 
