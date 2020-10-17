@@ -114,7 +114,7 @@ def calculateHeroWinRates(recentMatches):
     heroWinRates = sorted(heroWinRates, key = lambda i: i['win_rate'], reverse=True)
     heroWinRatesTop10 = heroWinRates[:10]
     heroWinRates = sorted(heroWinRates, key = lambda i: i['win_rate'])
-    heroWinRatesBottom10 = heroWinRates[:10]
+    heroWinRatesBottom10 = [h for h in heroWinRates[:10] if not h in heroWinRatesTop10]
     heroWinRates = {
         "hero_win_rate_top_10" : heroWinRatesTop10,
         "hero_win_rate_bottom_10" : heroWinRatesBottom10

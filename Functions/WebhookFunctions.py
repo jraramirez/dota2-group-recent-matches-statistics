@@ -9,7 +9,6 @@ import defaults
 def chatWinRate(winRate):
     uri = "https://discordapp.com/api/webhooks/" + defaults.DISCORD_WEBHOOK_ID + "/" + defaults.DISCORD_WEBHOOK_TOKEN
     content = "\nTeam's win rate (recent matches): " + "{:.1f}".format(winRate["win_rate"]) + "%"
-    print("Number of matches: " + str(winRate["number_of_matches"]))
     data = {"content": content}
     requests.post(uri, data)
 
